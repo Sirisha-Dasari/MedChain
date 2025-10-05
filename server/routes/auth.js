@@ -70,7 +70,7 @@ router.post('/register',
     body('password')
       .isLength({ min: 8 })
       .withMessage('Password must be at least 8 characters')
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
       .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
     
     body('role')
@@ -160,15 +160,15 @@ router.post('/register',
         expiresIn: process.env.JWT_EXPIRE || '7d'
       });
 
-    } catch (error) {
-      console.error('Registration error:', error);
-      
-      if (error.code === 11000) {
-        return res.status(400).json({ error: 'User already exists with this email' });
+      } catch (error) {
+        console.error('Registration error:', error);
+        
+        if (error.code === 11000) {
+          return res.status(400).json({ error: 'User already exists with this email' });
+        }
+        
+        res.status(500).json({ error: 'Registration failed', details: error.message });
       }
-      
-      res.status(500).json({ error: 'Registration failed' });
-    }
   }
 );
 

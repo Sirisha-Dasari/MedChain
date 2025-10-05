@@ -57,12 +57,15 @@ __turbopack_context__.s({
 });
 async function POST(request) {
     try {
-        const formData = await request.formData();
+        const body = await request.json();
         // Forward the request to the Express backend
         const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
         const response = await fetch(`${backendUrl}/api/auth/register`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
         const data = await response.json();
         return new Response(JSON.stringify(data), {

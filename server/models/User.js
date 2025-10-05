@@ -35,8 +35,7 @@ const userSchema = new mongoose.Schema({
   },
   bloodType: {
     type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-    required: function() { return this.role === 'patient'; }
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
   },
   
   // Doctor specific fields

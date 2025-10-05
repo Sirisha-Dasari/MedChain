@@ -1,7 +1,7 @@
-import { BellRing, BookHeart, Bot, HeartPulse, LayoutDashboard, Settings } from 'lucide-react';
-import NavLink from './nav-link';
 import { Separator } from '@/components/ui/separator';
+import { BellRing, BookHeart, Bot, HeartPulse, LayoutDashboard, MapPin, Settings } from 'lucide-react';
 import Link from 'next/link';
+import NavLink from './nav-link';
 
 const Sidebar = () => {
   return (
@@ -28,6 +28,10 @@ const Sidebar = () => {
         <NavLink href="/symptom-checker">
           <Bot className="h-5 w-5" />
           <span>Symptom Checker</span>
+        </NavLink>
+        <NavLink href="/nearby">
+          <MapPin className="h-5 w-5" />
+          <span>Nearby Health Centers</span>
         </NavLink>
       </nav>
       <div className="px-4 py-6 mt-auto">

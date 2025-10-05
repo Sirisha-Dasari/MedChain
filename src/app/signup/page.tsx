@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, ChangeEvent, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -21,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Eye, EyeOff, HeartPulse } from 'lucide-react';
 import Link from 'next/link';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 export default function SignupPage() {
   const [role, setRole] = useState('patient');
@@ -59,17 +59,27 @@ export default function SignupPage() {
         body: JSON.stringify(userData),
       });
 
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      const text = await response.text();
+      console.log('Response text:', text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = {};
+      }
 
       if (response.ok) {
         // Store token in localStorage
         localStorage.setItem('token', data.token);
-        
+
         // Redirect to dashboard
         window.location.href = '/dashboard';
       } else {
         // Handle error
-        alert(data.error || 'Signup failed');
+        console.error('Signup error:', data);
+        alert(data.error || JSON.stringify(data.details) || 'Signup failed');
       }
     } catch (error) {
       console.error('Signup error:', error);
@@ -172,12 +182,11 @@ export default function SignupPage() {
 
               {role === 'doctor' && (
                 <div className="space-y-2">
-                  <Label htmlFor="certificate">Doctor Certificate</Label>
+                  <Label htmlFor="certificate">Doctor Certificate (Optional)</Label>
                   <Input
                     id="certificate"
                     type="file"
                     accept="application/pdf,image/*"
-                    required
                     onChange={handleCertificateChange}
                   />
                   <p className="text-xs text-muted-foreground">
@@ -213,6 +222,9 @@ export default function SignupPage() {
                     </span>
                   </Button>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Password must be at least 8 characters with uppercase, lowercase, number, and special character.
+                </p>
               </div>
               <Button type="submit" className="w-full">
                 Create Account
